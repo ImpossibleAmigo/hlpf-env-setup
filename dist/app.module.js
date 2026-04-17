@@ -14,6 +14,12 @@ const cache_manager_1 = require("@nestjs/cache-manager");
 const cache_manager_redis_yet_1 = require("cache-manager-redis-yet");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const category_entity_1 = require("./categories/category.entity");
+const product_entity_1 = require("./products/product.entity");
+const categories_module_1 = require("./categories/categories.module");
+const products_module_1 = require("./products/products.module");
+const _1700000001_CreateTables_1 = require("./migrations/1700000001-CreateTables");
+const _1776437225119_AddIsActiveToProducts_1 = require("./migrations/1776437225119-AddIsActiveToProducts");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -23,26 +29,30 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
-                host: process.env.POSTGRES_HOST,
+                host: process.env.POSTGRES_HOST || 'localhost',
                 port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-                username: process.env.POSTGRES_USER,
-                password: process.env.POSTGRES_PASSWORD,
-                database: process.env.POSTGRES_DB,
-                entities: [],
-                synchronize: true,
+                username: process.env.POSTGRES_USER || 'nestuser',
+                password: process.env.POSTGRES_PASSWORD || 'nestpassword',
+                database: process.env.POSTGRES_DB || 'nestdb',
+                entities: [category_entity_1.Category, product_entity_1.Product],
+                synchronize: false,
+                migrationsRun: true,
+                migrations: [_1700000001_CreateTables_1.CreateTables1700000001, _1776437225119_AddIsActiveToProducts_1.AddIsActiveToProducts1776437225119],
             }),
             cache_manager_1.CacheModule.registerAsync({
                 isGlobal: true,
                 useFactory: async () => ({
                     store: await (0, cache_manager_redis_yet_1.redisStore)({
                         socket: {
-                            host: process.env.REDIS_HOST,
+                            host: process.env.REDIS_HOST || 'localhost',
                             port: parseInt(process.env.REDIS_PORT || '6379', 10),
                         },
                     }),
-                    ttl: 60000,
+                    ttl: 60 * 1000,
                 }),
             }),
+            categories_module_1.CategoriesModule,
+            products_module_1.ProductsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
