@@ -37,7 +37,10 @@ exports.AppModule = AppModule = __decorate([
                 entities: [category_entity_1.Category, product_entity_1.Product],
                 synchronize: false,
                 migrationsRun: true,
-                migrations: [_1700000001_CreateTables_1.CreateTables1700000001, _1776437225119_AddIsActiveToProducts_1.AddIsActiveToProducts1776437225119],
+                migrations: [
+                    _1700000001_CreateTables_1.CreateTables1700000001,
+                    _1776437225119_AddIsActiveToProducts_1.AddIsActiveToProducts1776437225119,
+                ],
             }),
             cache_manager_1.CacheModule.registerAsync({
                 isGlobal: true,

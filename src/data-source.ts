@@ -1,21 +1,19 @@
-/// <reference types="node" />
-const { DataSource } = require('typeorm');
+﻿import 'reflect-metadata';
+import { DataSource } from 'typeorm';
+// Переконайся, що імпорт точно відповідає назві файлу в папці src/categories
+import { Category } from './categories/category.entity';
+import { User } from './users/user.entity'; // Перевір, чи цей файл теж існує
 
-require('dotenv').config();
-
-module.exports = new DataSource({
-  type: 'postgres', // Замініть на ваш тип БД (наприклад, 'mysql', 'sqlite' тощо)
+export const AppDataSource = new DataSource({
+  type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'my_database',
-
-  synchronize: false, // Рекомендується false для продакшену
-  logging: process.env.NODE_ENV === 'development',
-
-  // Шляхи до файлів (відносно поточної директорії)
-  entities: [__dirname + '/**/*.entity.{ts,js}'],
-  migrations: [__dirname + '/migrations/*.{ts,js}'],
-  subscribers: [__dirname + '/subscribers/*.{ts,js}'],
+  port: parseInt(process.env.DB_PORT) || 5432,
+  username: process.env.DB_USERNAME || 'nestuser',
+  password: process.env.DB_PASSWORD || 'nestpassword',
+  database: process.env.DB_NAME || 'nest_db',
+  synchronize: false,
+  logging: true,
+  entities: [User, Category], // Додаємо Category сюди
+  migrations: ['./src/migrations/*.ts'],
+  subscribers: [],
 });

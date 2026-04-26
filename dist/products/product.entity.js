@@ -13,15 +13,6 @@ exports.Product = void 0;
 const typeorm_1 = require("typeorm");
 const category_entity_1 = require("../categories/category.entity");
 let Product = class Product {
-    id;
-    name;
-    description;
-    price;
-    isActive;
-    stock;
-    category;
-    createdAt;
-    updatedAt;
 };
 exports.Product = Product;
 __decorate([

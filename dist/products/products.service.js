@@ -18,15 +18,16 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const product_entity_1 = require("./product.entity");
 let ProductsService = class ProductsService {
-    productRepo;
     constructor(productRepo) {
         this.productRepo = productRepo;
     }
-    async findAll() { return this.productRepo.find({ relations: ['category'] }); }
+    async findAll() {
+        return this.productRepo.find({ relations: ['category'] });
+    }
     async findOne(id) {
         const product = await this.productRepo.findOne({ where: { id }, relations: ['category'] });
         if (!product)
-            throw new common_1.NotFoundException(product_entity_1.Product, #, not, found);
+            throw new common_1.NotFoundException('Product with ID ' + id + ' not found');
         return product;
     }
     async create(data) {
@@ -42,9 +43,19 @@ let ProductsService = class ProductsService {
     }
     async update(id, data) {
         const product = await this.findOne(id);
-        if (data.categoryId !== undefined)
+        if (data.categoryId !== undefined) {
             product.category = { id: data.categoryId };
-        Object.assign(product, data);
+        }
+        if (data.name !== undefined)
+            product.name = data.name;
+        if (data.description !== undefined)
+            product.description = data.description;
+        if (data.price !== undefined)
+            product.price = data.price;
+        if (data.stock !== undefined)
+            product.stock = data.stock;
+        if (data.isActive !== undefined)
+            product.isActive = data.isActive;
         return this.productRepo.save(product);
     }
     async remove(id) {

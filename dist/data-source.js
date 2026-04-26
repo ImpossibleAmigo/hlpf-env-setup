@@ -1,49 +1,22 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppDataSource = void 0;
 const typeorm_1 = require("typeorm");
-const dotenv = __importStar(require("dotenv"));
+const category_entity_1 = require("./categories/category.entity");
+const product_entity_1 = require("./products/product.entity");
+const _1700000001_CreateTables_1 = require("./migrations/1700000001-CreateTables");
+const _1776437225119_AddIsActiveToProducts_1 = require("./migrations/1776437225119-AddIsActiveToProducts");
+const dotenv = require("dotenv");
 dotenv.config();
-exports.default = new typeorm_1.DataSource({
+exports.AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
-    host: process.env.POSTGRES_HOST || 'localhost',
-    port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-    username: process.env.POSTGRES_USER || 'nestuser',
-    password: process.env.POSTGRES_PASSWORD || 'nestpassword',
-    database: process.env.POSTGRES_DB || 'nestdb',
-    entities: ['src/**/*.entity.ts'],
-    migrations: ['src/migrations/*.ts'],
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    username: process.env.DB_USERNAME || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    database: process.env.DB_NAME || 'nestjs_db',
+    entities: [category_entity_1.Category, product_entity_1.Product],
+    migrations: [_1700000001_CreateTables_1.CreateTables1700000001, _1776437225119_AddIsActiveToProducts_1.AddIsActiveToProducts1776437225119],
+    synchronize: false,
 });
 //# sourceMappingURL=data-source.js.map

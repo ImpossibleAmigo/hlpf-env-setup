@@ -16,7 +16,6 @@ exports.ProductsController = void 0;
 const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
 let ProductsController = class ProductsController {
-    productsService;
     constructor(productsService) {
         this.productsService = productsService;
     }
