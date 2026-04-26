@@ -1,20 +1,11 @@
 ﻿import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
-import { TrimPipe } from './common/pipes/trim.pipe';
+import { AppModule } from './app.module.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
-  app.useGlobalPipes(
-    new TrimPipe(),
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
-  
-  await app.listen(process.env.PORT ?? 3000);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3000);
+  console.log('Application is running on: http://localhost:3000');
 }
 bootstrap();
