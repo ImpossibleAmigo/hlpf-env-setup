@@ -1,28 +1,31 @@
-﻿import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
-import { CategoriesModule } from "./categories/categories.module";
-import { ProductsModule } from "./products/products.module";
-import { CreateTables1700000001000 } from "./migrations/1700000001000-CreateTables";
+﻿import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module.js';
+import { User } from './users/user.entity.js';
+import { Product } from './products/product.entity.js';
+import { Category } from './categories/category.entity.js';
+import { ProductsModule } from './products/products.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT || "5432"),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [__dirname + "/**/*.entity{.ts,.js}"],
-      migrations: [CreateTables1700000001000],
+      type: 'postgres',
+      host: process.env.DB_HOST || 'postgres_db',
+      port: 5432,
+      username: process.env.DB_USERNAME || 'nestuser',
+      password: process.env.DB_PASSWORD || 'nestpass',
+      database: process.env.DB_DATABASE || 'nestdb',
+      entities: [User, Product, Category],
+      migrations: ['dist/migrations/*.js'],
       migrationsRun: true,
       synchronize: false,
     }),
-    CategoriesModule,
+    AuthModule,
     ProductsModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}
-
