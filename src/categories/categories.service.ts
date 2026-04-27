@@ -1,9 +1,9 @@
 ﻿import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Category } from './category.entity';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Category } from './category.entity.js';
+import { CreateCategoryDto } from './dto/create-category.dto.js';
+import { UpdateCategoryDto } from './dto/update-category.dto.js';
 
 @Injectable()
 export class CategoriesService {
@@ -29,3 +29,4 @@ export class CategoriesService {
     return this.categoryRepo.remove(category);
   }
 }
+

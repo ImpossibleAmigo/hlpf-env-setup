@@ -15,14 +15,16 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('MiniShop API')
-    .setDescription('REST API для навчального інтернет-магазину. Автентифікація через JWT Bearer token.')
+    .setDescription('REST API для навчального інтернет-магазину.')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+    
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(3000);
-  console.log('Application is running on: http://localhost:3000');
+  // Слухаємо на всіх інтерфейсах (0.0.0.0)
+  await app.listen(3000, '0.0.0.0');
+  console.log('Server: http://localhost:3000/api/docs');
 }
 bootstrap();

@@ -1,19 +1,25 @@
-﻿# Практична робота №5: Система автентифікації та авторизації
+# Практична робота №6: Interceptors, Filters, Swagger
 
-**Виконав:** Олексій Чеберяко
-**Група:** [Впиши свою групу]
-**GitHub:** https://github.com/ImpossibleAmigo/hlpf-env-setup.git
-
-## Опис виконаних робіт:
-В ході виконання практичної роботи було реалізовано повноцінну систему реєстрації та логіну для онлайн-платформи MiniShop.
+**Студент:** [Ваше Прізвище та Ім'я]
+**Група:** [Ваша Група]
 
 ### Виконані завдання:
-- Налаштовано інфраструктуру Docker (Node.js + PostgreSQL).
-- Виправлено конфлікти ESM-модулів для коректного запуску NestJS.
-- Реалізовано автоматичне виконання міграцій бази даних TypeORM.
-- Розроблено сервіс автентифікації з використанням JWT-токенів та хешування паролів (Bcrypt).
-- Додано механізм RBAC (Role-Based Access Control) для захисту маршрутів.
+1. **LoggingInterceptor**: Додано логування HTTP-методів, URL та часу обробки запиту.
+2. **TransformInterceptor**: Налаштовано обгортку успішних відповідей у { data, statusCode, timestamp }. Виключено шляхи Swagger для стабільної роботи UI.
+3. **HttpExceptionFilter**: Стандартизовано вигляд помилок. Кожна помилка містить унікальний 	raceId.
+4. **Swagger UI**: Налаштовано документацію за адресою /api/docs. Виправлено помилки сумісності з ESM (ES Modules).
 
-## Результати тестування:
-1. **База даних**: Таблиці створені успішно (Screenshot 2).
-2. **API**: Ендпоінт /auth/register повертає статус 201 Created (Screenshot 3).
+### Скріншот Swagger UI:
+![Swagger](swagger-screenshot.png)
+
+### Формат успішної відповіді:
+`json
+{
+  "data": [],
+  "statusCode": 200,
+  "timestamp": "2026-04-27T18:37:45.702Z"
+}
+`
+
+### Приклад логів (Logging Interceptor):
+nest_app  | [32m[Nest] 34  - [39m04/27/2026, 3:34:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/categories, POST} route[39m[38;5;3m +0ms[39m nest_app  | [32m[Nest] 34  - [39m04/27/2026, 3:34:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/categories/:id, PATCH} route[39m[38;5;3m +1ms[39m nest_app  | [32m[Nest] 34  - [39m04/27/2026, 3:34:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/categories/:id, DELETE} route[39m[38;5;3m +1ms[39m nest_app  | [32m[Nest] 34  - [39m04/27/2026, 3:34:50 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +4ms[39m nest_app  | Server: http://localhost:3000/api/docs

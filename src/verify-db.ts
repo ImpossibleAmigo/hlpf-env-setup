@@ -1,31 +1,31 @@
-import { AppDataSource } from './data-source';
+﻿import { AppDataSource } from './data-source.js';
 
-// Скрипт для перевірки наявності таблиць у базі даних (для Скріншоту №3)
+// РЎРєСЂРёРїС‚ РґР»СЏ РїРµСЂРµРІС–СЂРєРё РЅР°СЏРІРЅРѕСЃС‚С– С‚Р°Р±Р»РёС†СЊ Сѓ Р±Р°Р·С– РґР°РЅРёС… (РґР»СЏ РЎРєСЂС–РЅС€РѕС‚Сѓ в„–3)
 async function verifyDatabase() {
   try {
-    console.log('--- Початок перевірки бази даних ---');
-    // Ініціалізуємо зв'язок
+    console.log('--- РџРѕС‡Р°С‚РѕРє РїРµСЂРµРІС–СЂРєРё Р±Р°Р·Рё РґР°РЅРёС… ---');
+    // Р†РЅС–С†С–Р°Р»С–Р·СѓС”РјРѕ Р·РІ'СЏР·РѕРє
     await AppDataSource.initialize();
-    console.log('✅ Успішне підключення до PostgreSQL через TypeORM!');
+    console.log('вњ… РЈСЃРїС–С€РЅРµ РїС–РґРєР»СЋС‡РµРЅРЅСЏ РґРѕ PostgreSQL С‡РµСЂРµР· TypeORM!');
 
-    // Запит для отримання списку таблиць
+    // Р—Р°РїРёС‚ РґР»СЏ РѕС‚СЂРёРјР°РЅРЅСЏ СЃРїРёСЃРєСѓ С‚Р°Р±Р»РёС†СЊ
     const queryRunner = AppDataSource.createQueryRunner();
     const tables = await queryRunner.query(
       `SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'`
     );
 
     if (tables.length === 0) {
-      console.log('⚠️ Таблиць не знайдено. Переконайтеся, що міграції були запущені успішно.');
+      console.log('вљ пёЏ РўР°Р±Р»РёС†СЊ РЅРµ Р·РЅР°Р№РґРµРЅРѕ. РџРµСЂРµРєРѕРЅР°Р№С‚РµСЃСЏ, С‰Рѕ РјС–РіСЂР°С†С–С— Р±СѓР»Рё Р·Р°РїСѓС‰РµРЅС– СѓСЃРїС–С€РЅРѕ.');
     } else {
-      console.log('\nСписок створених таблиць у схемі public:');
+      console.log('\nРЎРїРёСЃРѕРє СЃС‚РІРѕСЂРµРЅРёС… С‚Р°Р±Р»РёС†СЊ Сѓ СЃС…РµРјС– public:');
       console.table(tables);
-      console.log('\n--- Перевірка завершена успішно ---');
+      console.log('\n--- РџРµСЂРµРІС–СЂРєР° Р·Р°РІРµСЂС€РµРЅР° СѓСЃРїС–С€РЅРѕ ---');
     }
 
     await AppDataSource.destroy();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error('❌ Помилка підключення або виконання запиту:', message);
+    console.error('вќЊ РџРѕРјРёР»РєР° РїС–РґРєР»СЋС‡РµРЅРЅСЏ Р°Р±Рѕ РІРёРєРѕРЅР°РЅРЅСЏ Р·Р°РїРёС‚Сѓ:', message);
     process.exit(1);
   }
 }
