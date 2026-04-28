@@ -1,14 +1,21 @@
-services:
+﻿services:
   db:
     image: postgres:15
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: nestjs_db
+      POSTGRES_USER: nestuser
+      POSTGRES_PASSWORD: nestpassword
+      POSTGRES_DB: nestdb
     ports:
       - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6379:6379"
 
   app:
     build: .
@@ -20,10 +27,12 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: nestjs_db
+      DB_USERNAME: nestuser
+      DB_PASSWORD: nestpassword
+      DB_DATABASE: nestdb
+      REDIS_HOST: redis
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - redis
