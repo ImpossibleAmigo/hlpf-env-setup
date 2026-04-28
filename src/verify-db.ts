@@ -1,31 +1,31 @@
-﻿import { AppDataSource } from './data-source.js';
+import AppDataSource from './data-source.js';
 
-// РЎРєСЂРёРїС‚ РґР»СЏ РїРµСЂРµРІС–СЂРєРё РЅР°СЏРІРЅРѕСЃС‚С– С‚Р°Р±Р»РёС†СЊ Сѓ Р±Р°Р·С– РґР°РЅРёС… (РґР»СЏ РЎРєСЂС–РЅС€РѕС‚Сѓ в„–3)
+// Скрипт для перевірки наявності таблиць у базі даних (для Скріншоту №3)
 async function verifyDatabase() {
   try {
-    console.log('--- РџРѕС‡Р°С‚РѕРє РїРµСЂРµРІС–СЂРєРё Р±Р°Р·Рё РґР°РЅРёС… ---');
-    // Р†РЅС–С†С–Р°Р»С–Р·СѓС”РјРѕ Р·РІ'СЏР·РѕРє
+    console.log('--- Початок перевірки бази даних ---');
+    // Ініціалізуємо зв'язок
     await AppDataSource.initialize();
-    console.log('вњ… РЈСЃРїС–С€РЅРµ РїС–РґРєР»СЋС‡РµРЅРЅСЏ РґРѕ PostgreSQL С‡РµСЂРµР· TypeORM!');
+    console.log('✅ Успішне підключення до PostgreSQL через TypeORM!');
 
-    // Р—Р°РїРёС‚ РґР»СЏ РѕС‚СЂРёРјР°РЅРЅСЏ СЃРїРёСЃРєСѓ С‚Р°Р±Р»РёС†СЊ
+    // Запит для отримання списку таблиць
     const queryRunner = AppDataSource.createQueryRunner();
     const tables = await queryRunner.query(
       `SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'`
     );
 
     if (tables.length === 0) {
-      console.log('вљ пёЏ РўР°Р±Р»РёС†СЊ РЅРµ Р·РЅР°Р№РґРµРЅРѕ. РџРµСЂРµРєРѕРЅР°Р№С‚РµСЃСЏ, С‰Рѕ РјС–РіСЂР°С†С–С— Р±СѓР»Рё Р·Р°РїСѓС‰РµРЅС– СѓСЃРїС–С€РЅРѕ.');
+      console.log('⚠️ Таблиць не знайдено. Переконайтеся, що міграції були запущені успішно.');
     } else {
-      console.log('\nРЎРїРёСЃРѕРє СЃС‚РІРѕСЂРµРЅРёС… С‚Р°Р±Р»РёС†СЊ Сѓ СЃС…РµРјС– public:');
+      console.log('\nСписок створених таблиць у схемі public:');
       console.table(tables);
-      console.log('\n--- РџРµСЂРµРІС–СЂРєР° Р·Р°РІРµСЂС€РµРЅР° СѓСЃРїС–С€РЅРѕ ---');
+      console.log('\n--- Перевірка завершена успішно ---');
     }
 
     await AppDataSource.destroy();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error('вќЊ РџРѕРјРёР»РєР° РїС–РґРєР»СЋС‡РµРЅРЅСЏ Р°Р±Рѕ РІРёРєРѕРЅР°РЅРЅСЏ Р·Р°РїРёС‚Сѓ:', message);
+    console.error('❌ Помилка підключення або виконання запиту:', message);
     process.exit(1);
   }
 }

@@ -1,22 +1,23 @@
-п»їimport 'reflect-metadata';
+import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import * as dotenv from 'dotenv';
-import { User } from './users/user.entity.js';
-import { Product } from './products/product.entity.js';
-import { Category } from './categories/category.entity.js';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
-export const AppDataSource = new DataSource({
-    type: 'postgres',
-    host: process.env.DB_HOST || 'postgres_db',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    username: process.env.DB_USERNAME || 'nestuser',
-    password: process.env.DB_PASSWORD || 'nestpass',
-    database: process.env.DB_DATABASE || 'nestdb',
-    synchronize: false,
-    logging: true,
-    entities: [User, Product, Category],
-    migrations: ['src/migrations/*.ts'],
-    migrationsRun: true, // Р¦Р• Р’РђР–Р›РР’Рћ: NestJS СЃР°Рј Р·Р°РїСѓСЃС‚РёС‚СЊ РјС–РіСЂР°С†С–С— РїСЂРё СЃС‚Р°СЂС‚С–
+export default new DataSource({
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '5432'),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  synchronize: false,
+  logging: true,
+  // Використовуємо патерни для автоматичного пошуку всіх сутностей
+  entities: [
+    'src/**/entities/*.entity.ts',
+    'src/**/*.entity.ts'
+  ],
+  migrations: ['src/migrations/*.ts'],
+  subscribers: [],
 });

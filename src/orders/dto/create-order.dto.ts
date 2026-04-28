@@ -1,7 +1,7 @@
 import { IsArray, ValidateNested, ArrayMinSize } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateOrderItemDto } from './create-order-item.dto';
+import { CreateOrderItemDto } from './create-order-item.dto.js';
 export class CreateOrderDto {
   @ApiProperty({ type: [CreateOrderItemDto] })
   @IsArray() @ArrayMinSize(1) @ValidateNested({ each: true }) @Type(() => CreateOrderItemDto)

@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Order } from './order.entity';
-import { Product } from '../../products/product.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from 'typeorm';
+import { Order } from './order.entity.js';
+import { Product } from '../../products/product.entity.js';
 
 @Entity('order_items')
 export class OrderItem {
@@ -14,7 +14,7 @@ export class OrderItem {
   price: number;
 
   @ManyToOne(() => Order, (order) => order.items, { onDelete: 'CASCADE' })
-  order: Order;
+  order: Relation<Order>; // Використовуємо Relation
 
   @ManyToOne(() => Product, { eager: true })
   product: Product;

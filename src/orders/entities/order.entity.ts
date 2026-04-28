@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
-import { User } from '../../users/user.entity';
-import { OrderItem } from './order-item.entity';
-import { OrderStatus } from '../../common/enums/order-status.enum';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { User } from '../../users/user.entity.js';
+import { OrderItem } from './order-item.entity.js';
+import { OrderStatus } from '../../common/enums/order-status.enum.js';
 
 @Entity('orders')
 export class Order {
@@ -18,7 +18,7 @@ export class Order {
   user: User;
 
   @OneToMany(() => OrderItem, (item) => item.order, { eager: true, cascade: true })
-  items: OrderItem[];
+  items: Relation<OrderItem>[]; // Використовуємо Relation
 
   @CreateDateColumn()
   createdAt: Date;

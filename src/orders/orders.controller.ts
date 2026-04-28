@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, ParseIntPipe } from '@nestjs/common';
-import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderQueryDto } from './dto/order-query.dto';
-import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from '../auth/enums/role.enum';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { OrdersService } from './orders.service.js';
+import { CreateOrderDto } from './dto/create-order.dto.js';
+import { OrderQueryDto } from './dto/order-query.dto.js';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { RolesGuard } from '../auth/guards/roles.guard.js';
+import { Roles } from '../auth/decorators/roles.decorator.js';
+import { Role } from '../auth/enums/role.enum.js';
+import { CurrentUser } from '../auth/decorators/current-user.decorator.js';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Orders') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard)

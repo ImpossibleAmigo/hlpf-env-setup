@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
-import { Order } from './entities/order.entity';
-import { OrderItem } from './entities/order-item.entity';
-import { Product } from '../products/product.entity';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderQueryDto } from './dto/order-query.dto';
-import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-import { OrderStatus } from '../common/enums/order-status.enum';
-import { Role } from '../auth/enums/role.enum';
+import { Order } from './entities/order.entity.js';
+import { OrderItem } from './entities/order-item.entity.js';
+import { Product } from '../products/product.entity.js';
+import { CreateOrderDto } from './dto/create-order.dto.js';
+import { OrderQueryDto } from './dto/order-query.dto.js';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto.js';
+import { OrderStatus } from '../common/enums/order-status.enum.js';
+import { Role } from '../auth/enums/role.enum.js';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
@@ -27,18 +27,18 @@ export class OrdersService {
     try {
       let totalPrice = 0; const orderItems: OrderItem[] = [];
       for (const item of dto.items) {
-        const product = await qr.manager.findOne(Product, { where: { id: item.productId } });
-        if (!product) throw new NotFoundException(\Product #\ not found\);
-        if (product.stock < item.quantity) {
-          throw new BadRequestException(\Insufficient stock for "\"\);
+        const product = await qr.manager.findOne(Product, { where: { id: Number(item.productId) } });
+        if (!product) throw new NotFoundException(`Product #${Number(item.productId)} not found`);
+        if (product.stock < Number(item.quantity)) {
+          throw new BadRequestException(`Insufficient stock for "${product.name}"`);
         }
-        product.stock -= item.quantity;
+        product.stock -= Number(item.quantity);
         await qr.manager.save(product);
         const orderItem = qr.manager.create(OrderItem, {
-          product, quantity: item.quantity, price: product.price,
+          product, quantity: Number(item.quantity), price: product.price,
         });
         orderItems.push(orderItem);
-        totalPrice += Number(product.price) * item.quantity;
+        totalPrice += Number(product.price) * Number(item.quantity);
       }
       const order = qr.manager.create(Order, {
         user: { id: userId } as any, items: orderItems, totalPrice, status: OrderStatus.PENDING,
@@ -76,7 +76,7 @@ export class OrdersService {
   async remove(id: number) { return this.orderRepo.delete(id); }
 
   private async clearProductsCache() {
-    const keys: string[] = await this.cacheManager.store.keys('products:*');
+    const keys: string[] = await (this.cacheManager as any).store?.keys('products:*') || [];
     if (keys.length > 0) await Promise.all(keys.map(k => this.cacheManager.del(k)));
   }
 }

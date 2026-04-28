@@ -1,23 +1,19 @@
-ï»¿import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor.js';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(appModule);
 
   app.useGlobalPipes(new ValidationPipe({
-    transform: true,
     whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true, // ÊÐÈÒÈ×ÍÎ: ïåðåòâîðþº òèïè DTO (string -> number)
   }));
-
-  app.useGlobalInterceptors(new TransformInterceptor());
 
   const config = new DocumentBuilder()
     .setTitle('MiniShop API')
-    .setDescription('The MiniShop API description')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
@@ -27,4 +23,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-// Application bootstrapped by Oleksii Cheberiako
